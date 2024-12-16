@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config
+		name="HTTP_Request_configuration"
+		doc:name="HTTP Request configuration"
+		doc:id="9f37912c-a5e5-4f50-a1fc-8b146da5ea4e"
+		basePath="${request.basePath}">
+		<http:request-connection
+			protocol="${request.protocol}" host="${request.host}"
+			port="${request.port}" />
+	</http:request-config>
+	<http:listener-config
+		name="api-nasa-apod-httpListenerConfig">
+		<http:listener-connection host="${http.host}"
+			port="${http.port}" readTimeout="${http.timeout}" />
+	</http:listener-config>
+	<apikit:config name="api-nasa-apod-config"
+		api="resource::68280e3a-b385-48bb-8dba-44982a379876:api-nasa-apod:1.0.1:raml:zip:api-nasa-apod.raml"
+		outboundHeadersMapName="outboundHeaders"
+		httpStatusVarName="httpStatus" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="04c6384d-388d-4a03-b9c7-81fc4fc9da5d" file="config.yaml" />
+
+</mule>

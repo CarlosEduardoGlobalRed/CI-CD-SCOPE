@@ -1,0 +1,13 @@
+http:
+    protocol: "HTTP"
+    host: "localhost"
+    port: "8081"
+    path: "/api/*"
+    timeout: "30000"
+
+request:
+    host: "api.nasa.gov"
+    port: "443"
+    protocol: "HTTPS"
+    path: "/apod"
+    basePath: "/planetary"

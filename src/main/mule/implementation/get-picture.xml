@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="get-picturesSubFlow"
+		doc:id="d29d5ca9-f891-40a6-b982-74f6d952cd6a">
+		<http:request method="GET" doc:name="Request"
+			doc:id="c819501a-38e6-4617-b957-b572fdc212b1"
+			config-ref="HTTP_Request_configuration" path="${request.path}">
+			<http:query-params><![CDATA[#[%dw 2.0 
+output application/json skipNullOn="everywhere"
+---
+{
+    api_key: attributes.queryParams.api_key default null,
+    count: attributes.queryParams.count default null,
+    date: attributes.queryParams.date default null,
+    start_date: attributes.queryParams.start_date default null,
+    end_date: attributes.queryParams.end_date default null,
+    thumbs: attributes.queryParams.thumbs default null
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Transform Message"
+			doc:id="c50ba702-8554-4b72-9290-c5d83e0b4e1d">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+resultado:[{
+ data: payload.date,
+ urlFoto: payload.url,
+ explicacao: payload.explanation
+}]
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger"
+			doc:id="5c343237-461f-43e8-a660-4ed6ab181fcf"
+			message="requisição realizada" />
+	</sub-flow>
+</mule>
